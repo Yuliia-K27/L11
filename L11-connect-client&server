@@ -1,0 +1,28 @@
+#для підключення до сервера та обміну повідомленнями з чат-ботом
+import socket
+
+# задаємо адресу сервера та порт
+HOST = 'localhost'
+PORT = 5000
+
+# створюємо сокет і підключаємось до сервера
+client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client_socket.connect((HOST, PORT))
+
+# отримуємо повідомлення від сервера та виводимо його
+data = client_socket.recv(1024)
+print(data.decode())
+
+# надсилаємо повідомлення до сервера та отримуємо відповідь
+while True:
+    message = input('You: ')
+    client_socket.sendall(message.encode())
+    data = client_socket.recv(1024)
+    print('Chatbot:', data.decode())
+
+    # якщо клієнт відправляє повідомлення "bye", він закриває з'єднання з сервером
+    if message.lower() == 'bye':
+        break
+
+# закриваємо з'єднання з сервером
+client_socket.close()
